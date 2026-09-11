@@ -65,12 +65,13 @@ jobs:
       - name: "Execute Gradle assemble"
         run: "./gradlew assemble${{ matrix.target }}"
 
+      - name: "Upload debug APK artifact"
+        if: ${{ matrix.target == 'Debug' && success() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: microg-debug-apk
+          path: "play-services-core/build/outputs/apk/default/debug/*.apk"
+          if-no-files-found: error
+
       - name: "Execute Gradle lint"
         run: "./gradlew lint${{ matrix.target }}"
-
-#      - name: "Upload APK artifacts"
-#        uses: actions/upload-artifact@v7
-#        with:
-#          name: microg-apks-${{ matrix.target }}
-#          path: "play-services-core/build/outputs/apk/*/*/*.apk"
-#          if-no-files-found: error
